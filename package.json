@@ -5,7 +5,7 @@
   "description": "Production-Ready AI-Powered Facial Expression Analysis Web Application",
   "scripts": {
     "install:all": "npm install && npm --prefix client install && npm --prefix server install",
-    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"cyan,magenta\" \"npm run dev:server\" \"npm run dev:client\"",
+    "dev": "npx concurrently -n \"SERVER,CLIENT\" -c \"cyan,magenta\" \"npm run dev:server\" \"npm run dev:client\"",
     "dev:client": "npm --prefix client run dev",
     "dev:server": "npm --prefix server run dev",
     "build": "npm --prefix client run build && npm --prefix server run build",
