@@ -3,15 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "description": "Production-Ready AI-Powered Facial Expression Analysis Web Application",
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
     "install:all": "npm install && npm --prefix client install && npm --prefix server install",
     "dev": "node scripts/dev.js",
     "dev:client": "npm --prefix client run dev",
     "dev:server": "npm --prefix server run dev",
-    "build": "npm --prefix client run build && npm --prefix server run build",
-    "build:client": "npm --prefix client run build",
-    "build:server": "npm --prefix server run build",
-    "start": "npm --prefix server run start",
+    "build": "npm --prefix client install && npm --prefix client run build",
+    "build:client": "npm --prefix client install && npm --prefix client run build",
+    "build:server": "npm --prefix server install && npm --prefix server run build",
+    "start": "node scripts/dev.js",
     "lint": "npm --prefix client run lint"
   },
   "devDependencies": {

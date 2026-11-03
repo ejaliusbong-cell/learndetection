@@ -1,7 +1,7 @@
 import { getAccessToken } from './supabase';
 import { AnalysisSessionRecord, UserStatistics, UserProfile } from '../types';
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = await getAccessToken();
@@ -19,6 +19,14 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     ...options,
     headers,
   });
+
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    if (!response.ok) {
+      throw new Error(`API error ${response.status}: Non-JSON response`);
+    }
+    return {} as T;
+  }
 
   const data = await response.json();
 
