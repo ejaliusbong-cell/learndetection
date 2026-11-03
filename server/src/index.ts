@@ -41,7 +41,7 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // Start server
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
   app.listen(ENV.PORT, () => {
     console.log(`🚀 [FaceScan Backend Server] listening on port ${ENV.PORT}`);
     console.log(`📡 Environment: ${ENV.NODE_ENV}`);

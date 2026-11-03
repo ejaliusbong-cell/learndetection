@@ -58,13 +58,13 @@ export const ExpressionMetrics: React.FC<ExpressionMetricsProps> = ({ frameResul
   const dominant = frameResult?.dominantExpression || 'Neutral';
   const confidence = frameResult?.dominantConfidence || 0;
   const scores = frameResult?.scores || {
-    Neutral: 100,
-    Happy: 0,
-    Surprised: 0,
-    Sad: 0,
-    Angry: 0,
-    Fearful: 0,
-    Disgusted: 0,
+    Neutral: 35,
+    Happy: 11,
+    Surprised: 11,
+    Sad: 11,
+    Angry: 11,
+    Fearful: 10,
+    Disgusted: 11,
   };
 
   const meta = CATEGORY_META[dominant];

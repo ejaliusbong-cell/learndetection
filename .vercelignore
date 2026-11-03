@@ -1,0 +1,10 @@
+# Directories ignored by Vercel deployment
+.git
+.github
+node_modules
+sql/
+scripts/
+docs/
+.env.local
+.env
+*.log

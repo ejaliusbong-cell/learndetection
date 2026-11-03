@@ -7,13 +7,13 @@ export interface BlendshapeCategory {
 
 export class ExpressionClassifier {
   private smoothedScores: Record<ExpressionCategory, number> = {
-    Neutral: 1.0,
-    Happy: 0.0,
-    Surprised: 0.0,
-    Sad: 0.0,
-    Angry: 0.0,
-    Fearful: 0.0,
-    Disgusted: 0.0,
+    Neutral: 40.0,
+    Happy: 10.0,
+    Surprised: 10.0,
+    Sad: 10.0,
+    Angry: 10.0,
+    Fearful: 10.0,
+    Disgusted: 10.0,
   };
 
   private smoothingFactor: number; // Alpha for exponential moving average
@@ -73,17 +73,25 @@ export class ExpressionClassifier {
     const mouthShrugUpper = get('mouthShrugUpper');
     const rawDisgusted = noseSneer * 0.6 + mouthShrugUpper * 0.4;
 
-    // Neutral: Inverse of active emotional expressions
-    const totalActivity = rawHappy + rawSurprised + rawSad + rawAngry + rawFearful + rawDisgusted;
-    const rawNeutral = Math.max(0.05, 1.0 - totalActivity * 1.4);
+    // Neutral: Lower baseline (0.30 instead of 1.0) so it does not dominate
+    // and decays swiftly when facial muscle action units activate
+    const totalActivity =
+      rawHappy * 2.2 +
+      rawSurprised * 2.0 +
+      rawSad * 2.0 +
+      rawAngry * 2.1 +
+      rawFearful * 1.9 +
+      rawDisgusted * 2.0;
+
+    const rawNeutral = Math.max(0.02, 0.30 - totalActivity * 0.9);
 
     const rawCandidates: Record<ExpressionCategory, number> = {
-      Happy: Math.min(1.0, rawHappy * 1.5),
-      Surprised: Math.min(1.0, rawSurprised * 1.4),
-      Sad: Math.min(1.0, rawSad * 1.4),
-      Angry: Math.min(1.0, rawAngry * 1.5),
-      Fearful: Math.min(1.0, rawFearful * 1.3),
-      Disgusted: Math.min(1.0, rawDisgusted * 1.4),
+      Happy: Math.min(1.0, rawHappy * 2.2),
+      Surprised: Math.min(1.0, rawSurprised * 2.0),
+      Sad: Math.min(1.0, rawSad * 2.0),
+      Angry: Math.min(1.0, rawAngry * 2.1),
+      Fearful: Math.min(1.0, rawFearful * 1.9),
+      Disgusted: Math.min(1.0, rawDisgusted * 2.0),
       Neutral: rawNeutral,
     };
 
@@ -125,13 +133,13 @@ export class ExpressionClassifier {
 
   reset() {
     this.smoothedScores = {
-      Neutral: 100.0,
-      Happy: 0.0,
-      Surprised: 0.0,
-      Sad: 0.0,
-      Angry: 0.0,
-      Fearful: 0.0,
-      Disgusted: 0.0,
+      Neutral: 35.0,
+      Happy: 11.0,
+      Surprised: 11.0,
+      Sad: 11.0,
+      Angry: 11.0,
+      Fearful: 10.0,
+      Disgusted: 11.0,
     };
   }
 }
