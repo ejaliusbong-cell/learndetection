@@ -7,7 +7,7 @@ dotenv.config({ path: path.resolve(process.cwd(), '../.env.local') });
 dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 
 export const ENV = {
-  PORT: process.env.PORT ? parseInt(process.env.PORT, 10) : 5000,
+  PORT: process.env.PORT ? parseInt(process.env.PORT, 10) : 5001,
   NODE_ENV: process.env.NODE_ENV || 'development',
   CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
   
