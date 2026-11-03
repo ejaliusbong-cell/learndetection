@@ -1,61 +1,57 @@
-# 📚 Dokumentasi Lengkap Sistem Monitoring Gempa Bumi & Tsunami BMKG
+# 📚 FaceScan AI - Technical Engineering & Architecture Documentation
 
-Selamat datang di pusat dokumentasi resmi **BMKG Real-Time Seismic & Tsunami Early Warning System (InaTEWS)**. Proyek ini mengadopsi arsitektur terpadu (*unified fullstack*) berbasis **Next.js App Router**, menghubungkan Frontend responsif, Backend REST Route Handlers, dan Supabase Database dalam satu struktur yang rapi dan terkunci.
-
----
-
-## 📑 Daftar Modul Dokumentasi
-
-| No | Modul Dokumentasi | Deskripsi |
-| :---: | :--- | :--- |
-| 01 | [**01_PROJECT_OVERVIEW.md**](./01_PROJECT_OVERVIEW.md) | Gambaran umum proyek, misi InaTEWS, dan arsitektur sistem level tinggi. |
-| 02 | [**02_ARCHITECTURE_UNIFIED.md**](./02_ARCHITECTURE_UNIFIED.md) | Desain arsitektur Next.js fullstack terpadu (kunci struktur folder proyek). |
-| 03 | [**03_BMKG_API_INGESTION.md**](./03_BMKG_API_INGESTION.md) | Protokol pengambilan data resmi BMKG, penanganan proteksi WAF 403, dan parsing koordinat. |
-| 04 | [**04_SUPABASE_DATABASE_SCHEMA.md**](./04_SUPABASE_DATABASE_SCHEMA.md) | Skema DDL PostgreSQL, tabel gempa, telemetri sinkronisasi, dan kebijakan Row Level Security. |
-| 05 | [**05_REST_API_ENDPOINTS.md**](./05_REST_API_ENDPOINTS.md) | Spesifikasi lengkap endpoint REST API (`/api/earthquakes`, `/api/cron`, `/api/simulation`, dsb). |
-| 06 | [**06_SIMULATION_ENGINE.md**](./06_SIMULATION_ENGINE.md) | Mesin simulasi gempa megathrust & tsunami untuk latihan evakuasi dan pengujian sistem. |
-| 07 | [**07_LEAFLET_GIS_SEISMIC_MAP.md**](./07_LEAFLET_GIS_SEISMIC_MAP.md) | Implementasi peta interaktif GIS Leaflet dengan tema gelap dan indikator episentrum beranimasi. |
-| 08 | [**08_WEB_AUDIO_EMERGENCY_SIREN.md**](./08_WEB_AUDIO_EMERGENCY_SIREN.md) | Sintesis audio sirine darurat berbasis Web Audio API tanpa berkas audio eksternal. |
-| 09 | [**09_CRON_AUTOMATION_SYNC.md**](./09_CRON_AUTOMATION_SYNC.md) | Penjadwalan otomatis ingestion data seismik BMKG dan pencatatan telemetri performa. |
-| 10 | [**10_LOCAL_DEVELOPMENT_GUIDE.md**](./10_LOCAL_DEVELOPMENT_GUIDE.md) | Panduan instalasi lokal, konfigurasi `.env.local`, dan menjalankan server pengembang. |
-| 11 | [**11_DEPLOYMENT_VERCEL_SUPABASE.md**](./11_DEPLOYMENT_VERCEL_SUPABASE.md) | Panduan peluncuran produksi ke platform Vercel dan Supabase Cloud. |
-| 12 | [**12_TROUBLESHOOTING_FAQ.md**](./12_TROUBLESHOOTING_FAQ.md) | Panduan penyelesaian kendala umum (SSR Leaflet, WAF BMKG, fallback store). |
+Welcome to the official documentation for **FaceScan AI**, a production-grade, privacy-first web application for real-time facial expression analysis powered by **Google MediaPipe FaceLandmarker WebAssembly**, **Supabase Auth (Google OAuth)**, and **Google Cloud SQL PostgreSQL**.
 
 ---
 
-## 🏛️ Kunci Struktur Proyek (Locked Architecture)
+## 📑 Documentation Index
+
+| Document | Description |
+| :--- | :--- |
+| 🏗️ [**SYSTEM_ARCHITECTURE.md**](./SYSTEM_ARCHITECTURE.md) | High-level system architecture, client-side WebAssembly inference, and Cloud Run deployment. |
+| 🧠 [**COMPUTER_VISION_PIPELINE.md**](./COMPUTER_VISION_PIPELINE.md) | 478-landmark extraction, 52 blendshape FACS mapping to 7 basic expressions, and temporal EMA smoothing. |
+| 🛡️ [**AUTH_SECURITY_PRIVACY.md**](./AUTH_SECURITY_PRIVACY.md) | Supabase Google OAuth flow, JWT verification, zero-video upload guarantee, and GDPR compliance. |
+| 🗄️ [**DATABASE_DESIGN.md**](./DATABASE_DESIGN.md) | PostgreSQL schema (`profiles`, `analysis_sessions`, `expression_results`, `user_preferences`, `consent_records`). |
+| 🔌 [**API_REFERENCE.md**](./API_REFERENCE.md) | Complete Express REST API specification, payload formats, error codes, and authentication headers. |
+| 🚀 [**GETTING_STARTED.md**](./GETTING_STARTED.md) | Local development setup, camera permissions, environment variables, and execution steps. |
+| 🚢 [**PRODUCTION_DEPLOYMENT.md**](./PRODUCTION_DEPLOYMENT.md) | Guide to deploying frontend (Vercel/Cloud Storage) and backend (Google Cloud Run + Cloud SQL). |
+
+---
+
+## 🏛️ Project Directory Structure
 
 ```text
-BMKG/
-├── app/
-│   ├── api/                      # 🔌 BACKEND REST API (Route Handlers)
-│   │   ├── earthquakes/          # GET: Daftar gempa riwayat & filter magnitudo
-│   │   │   └── latest/           # GET: Data gempa terbaru BMKG
-│   │   ├── cron/sync-bmkg/       # POST/GET: Ingestion & sinkronisasi data BMKG
-│   │   ├── simulation/           # POST/GET/DELETE: Kontrol simulasi demo
-│   │   └── health/               # GET: Telemetri kesehatan koneksi & sinkronisasi
-│   │
-│   ├── globals.css               # Styling dark mode Tailwind & radar pulse
-│   ├── layout.tsx                # Root layout & Leaflet stylesheet
-│   └── page.tsx                  # 🖥️ FRONTEND DASHBOARD (Terhubung langsung ke /api/*)
+FaceScan/
+├── client/                     # 🌐 Frontend React 18 + Vite + TypeScript + Tailwind CSS
+│   ├── src/
+│   │   ├── ai/                 # Computer Vision & Inference Engine
+│   │   │   ├── faceLandmarker.ts       # MediaPipe FaceLandmarker loader & cache
+│   │   │   ├── expressionClassifier.ts # FACS Blendshapes -> 7 Expressions + EMA smoothing
+│   │   │   └── drawingUtils.ts         # Canvas mesh & contour rendering (478 landmarks)
+│   │   ├── components/         # Modular UI Components
+│   │   │   ├── analyze/        # CameraViewport, ExpressionMetrics, SessionRecorder
+│   │   │   ├── common/         # ProtectedRoute, Modals
+│   │   │   └── layout/         # Navbar, Footer
+│   │   ├── context/            # AuthContext (Google OAuth & Supabase session)
+│   │   ├── pages/              # LandingPage, AuthPage, DashboardPage, AnalyzePage, HistoryPage, ProfilePage
+│   │   ├── services/           # Supabase SDK client & authenticated REST API client
+│   │   └── types/              # TypeScript definitions for expressions, sessions, users
+│   ├── vite.config.ts          # Proxy configuration to backend on port 5000
+│   └── package.json
 │
-├── components/                   # Komponen Frontend
-│   ├── Navbar.tsx                # Navigasi, Toggle Sirine Suara, Status BMKG
-│   ├── EarthquakeHero.tsx        # Kartu Sorotan Gempa Terkini + Shakemap BMKG
-│   ├── EarthquakeMap.tsx         # Peta Seismik Indonesia (Leaflet GIS)
-│   ├── EarthquakeList.tsx        # Tab Gempa M 5.0+ dan Gempa Dirasakan (MMI)
-│   ├── SimulationAlertBanner.tsx # Banner Peringatan Mode Simulasi
-│   └── SimulationModal.tsx       # Modal Kontrol Skenario Simulasi Demo
-│
-├── lib/                          # Shared Services & Utility
-│   ├── bmkg.ts                   # Fetcher data BMKG (bypass proteksi WAF 403)
-│   ├── memoryStore.ts            # High-speed in-memory cache & fallback store
-│   ├── supabase.ts               # Integrasi Supabase client
-│   └── audio.ts                  # Sintesis sirine audio darurat (Web Audio API)
+├── server/                     # ⚙️ Backend Node.js + Express + TypeScript
+│   ├── src/
+│   │   ├── config/             # Environment parsing & PostgreSQL pool (Cloud SQL / Supabase)
+│   │   ├── middleware/         # Supabase JWT Verification, Zod error handler, CORS, Helmet
+│   │   ├── routes/             # REST Endpoints: /api/auth, /api/profile, /api/analysis, /api/preferences, /api/consent
+│   │   ├── services/           # Database business logic (Profile, Analysis Sessions, Preferences)
+│   │   └── index.ts            # Express server entrypoint
+│   └── package.json
 │
 ├── sql/
-│   └── schema.sql                # Skema DDL PostgreSQL untuk Supabase SQL Editor
-├── docs/                         # Berkas Dokumentasi Teknis Lengkap
-├── .env.local                    # Kredensial Supabase & Konfigurasi Sistem
-└── package.json
+│   └── schema.sql              # PostgreSQL DDL Schema with triggers and indexes
+├── docs/                       # Technical Engineering & Compliance Documentation
+├── .env.example                # Unified Environment template
+├── package.json                # Root concurrent scripts
+└── README.md                   # Project overview & quickstart
 ```

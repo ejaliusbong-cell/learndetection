@@ -1,110 +1,119 @@
-# 🌐 BMKG Real-Time Seismic & Tsunami Early Warning System
+# 🎭 FaceScan AI - Real-Time Facial Expression Analysis Platform
 
-> Platform Monitoring Seismik & Peringatan Dini Gempa Bumi / Tsunami Indonesia terpadu berbasis **Next.js App Router**, terintegrasi data resmi **BMKG** dan basis data **Supabase PostgreSQL**.
+> Production-ready, privacy-first AI web application analyzing 478 facial landmarks and blendshapes in real-time using **MediaPipe WebAssembly**, authenticated via **Supabase Google OAuth**, backed by an **Express.js API** and **PostgreSQL (Google Cloud SQL)**.
 
-![Next.js](https://img.shields.io/badge/Next.js-14.2%20App%20Router-black?logo=next.js)
 ![React](https://img.shields.io/badge/React-18-blue?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-v5-3178C6?logo=typescript)
+![MediaPipe](https://img.shields.io/badge/MediaPipe-FaceLandmarker%20WASM-teal?logo=google)
 ![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v3.4-38B2AC?logo=tailwind-css)
-![Leaflet](https://img.shields.io/badge/Leaflet-GIS%20Peta-199900?logo=leaflet)
-![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL%20%26%20RLS-3ECF8E?logo=supabase)
+![Supabase](https://img.shields.io/badge/Supabase-Google%20OAuth-3ECF8E?logo=supabase)
+![Express](https://img.shields.io/badge/Express-REST%20API-lightgrey?logo=express)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Cloud%20SQL-336791?logo=postgresql)
 
 ---
 
-## 🏛️ Kunci Struktur Proyek (Locked Unified Architecture)
+## 🌟 Key Application Features
 
-Frontend dan Backend disatukan secara elegan di bawah **Next.js App Router**, tanpa pemisahan monorepo yang rumit:
+1. **Client-Side Computer Vision Engine**:
+   - Zero raw video uploaded to any server.
+   - Extracts 478 facial mesh landmarks and 52 Action Unit blendshapes in local browser WebAssembly.
+   - Standardized FACS mapping across 7 basic expressions: **Happy**, **Neutral**, **Surprised**, **Sad**, **Angry**, **Fearful**, and **Disgusted**.
+   - Temporal Exponential Moving Average (EMA) smoothing for jitter-free real-time confidence scores.
+
+2. **Professional SaaS Landing Page**:
+   - Hero section with live interactive visualization preview.
+   - Features, How it Works, Technology, Ethical AI Charter, and FAQ sections.
+
+3. **Secure Authentication**:
+   - Supabase Auth with Google OAuth PKCE flow.
+   - Session persistence, token refresh, and instant one-click demo explorer mode.
+
+4. **Interactive Analysis Studio**:
+   - Camera device selector with automatic permissions management.
+   - Live canvas landmark mesh overlay toggle.
+   - Dominant expression badge and dynamic confidence distribution bars.
+   - Session Recorder controller: records temporal windows and saves summaries to the database.
+
+5. **Personal History & Audit**:
+   - Comprehensive session history table with expression filter.
+   - Session Inspector modal showing breakdown charts and session notes.
+   - Full session deletion rights.
+
+6. **Profile & Ethical AI Rights**:
+   - Google account profile information.
+   - Camera and smoothing factor customization.
+   - One-click GDPR permanent data deletion (Right to be Forgotten).
+
+---
+
+## 🏛️ Project Directory Structure
 
 ```text
-BMKG/
-├── app/
-│   ├── api/                      # 🔌 BACKEND REST API (Route Handlers)
-│   │   ├── earthquakes/          # GET: Daftar gempa riwayat & filter magnitudo
-│   │   │   └── latest/           # GET: Data gempa terbaru BMKG
-│   │   ├── cron/sync-bmkg/       # POST/GET: Ingestion & sinkronisasi data BMKG
-│   │   ├── simulation/           # POST/GET/DELETE: Kontrol simulasi demo
-│   │   └── health/               # GET: Telemetri kesehatan koneksi & sinkronisasi
-│   │
-│   ├── globals.css               # Styling dark mode Tailwind & radar pulse
-│   ├── layout.tsx                # Root layout & Leaflet stylesheet
-│   └── page.tsx                  # 🖥️ FRONTEND DASHBOARD (Terhubung langsung ke /api/*)
+FaceScan/
+├── client/                     # 🌐 Frontend React 18 + Vite + TypeScript + Tailwind CSS
+│   ├── src/
+│   │   ├── ai/                 # Computer Vision & Inference Engine
+│   │   ├── components/         # Modular UI Components (Studio, Navbar, Metrics)
+│   │   ├── context/            # Supabase Auth Context & Session Management
+│   │   ├── pages/              # Landing, Auth, Dashboard, Analyze, History, Profile
+│   │   ├── services/           # Supabase SDK & REST API client
+│   │   └── types/              # TypeScript Interfaces
+│   ├── vite.config.ts
+│   └── package.json
 │
-├── components/                   # Komponen Frontend
-│   ├── Navbar.tsx                # Navigasi, Toggle Sirine Suara, Status BMKG
-│   ├── EarthquakeHero.tsx        # Kartu Sorotan Gempa Terkini + Shakemap BMKG
-│   ├── EarthquakeMap.tsx         # Peta Seismik Indonesia (Leaflet GIS)
-│   ├── EarthquakeList.tsx        # Tab Gempa M 5.0+ dan Gempa Dirasakan (MMI)
-│   ├── SimulationAlertBanner.tsx # Banner Peringatan Mode Simulasi
-│   └── SimulationModal.tsx       # Modal Kontrol Skenario Simulasi Demo
-│
-├── lib/                          # Shared Services & Utility
-│   ├── bmkg.ts                   # Fetcher data BMKG (bypass proteksi WAF 403)
-│   ├── memoryStore.ts            # High-speed in-memory cache & fallback store
-│   ├── supabase.ts               # Integrasi Supabase client
-│   └── audio.ts                  # Sintesis sirine audio darurat (Web Audio API)
+├── server/                     # ⚙️ Backend Node.js + Express + TypeScript
+│   ├── src/
+│   │   ├── config/             # DB Pool (Cloud SQL) & Environment
+│   │   ├── middleware/         # Supabase JWT Auth & Error Handling
+│   │   ├── routes/             # REST Endpoints
+│   │   ├── services/           # Database Query Services
+│   │   └── index.ts            # Server Entrypoint
+│   └── package.json
 │
 ├── sql/
-│   └── schema.sql                # Skema DDL PostgreSQL untuk Supabase SQL Editor
-├── docs/                         # Berkas Dokumentasi Teknis Lengkap
-├── .env.local                    # Kredensial Supabase & Konfigurasi Sistem
-└── package.json
+│   └── schema.sql              # PostgreSQL DDL Schema
+├── docs/                       # Comprehensive Architecture & Engineering Guides
+├── .env.example                # Unified Environment Template
+├── package.json                # Root Concurrent Scripts
+└── README.md
 ```
 
 ---
 
-## 🚀 Fitur Unggulan
+## ⚡ Quickstart Guide
 
-1. **Pemantauan Seismik Terkini (Real-Time Ingestion)**:
-   - Terkoneksi ke endpoint resmi BMKG (`autogempa.json`, `gempaterkini.json`, `gempadirasakan.json`).
-   - Dilengkapi *anti-blocking header* peramban modern untuk melewati proteksi WAF 403 BMKG.
-   - Polling otomatis setiap 30 detik pada sisi klien.
-
-2. **Peta Seismik Interaktif (Leaflet GIS)**:
-   - Visualisasi titik gempa tektonik kepulauan Nusantara dengan latar peta gelap (*CartoDB Dark Matter*).
-   - Penanda episentrum proporsional berdasarkan magnitudo dengan animasi pulsasi radar untuk gempa kuat (M ≥ 7.0).
-   - Popup info detail (kedalaman, waktu WIB, koordinat, dan status tsunami).
-
-3. **Sintesis Audio Sirine Peringatan (Web Audio API)**:
-   - Menghasilkan sirine peringatan dini secara langsung melalui osilator frekuensi ganda termodulasi LFO (0.7 Hz) tanpa memerlukan berkas audio eksternal.
-
-4. **Mesin Simulasi Bencana (Drill Engine)**:
-   - Skenario *Megathrust Selat Sunda* (M 8.7) berstatus Siaga Tsunami.
-   - Skenario *Gempa Laut Maluku* (M 7.8).
-   - Kustom skenario gempa untuk pelatihan evakuasi tanggap bencana.
-
-5. **Ketahanan Tinggi (Dual Layer Storage)**:
-   - Menggunakan PostgreSQL Supabase dengan Row Level Security (RLS).
-   - Dilengkapi *in-memory fallback store* otomatis jika kredensial database cloud belum dipasang.
-
----
-
-## ⚡ Panduan Menjalankan Aplikasi
-
+### 1. Install All Dependencies
 ```bash
-# 1. Instal dependensi
-npm install
+npm run install:all
+```
 
-# 2. Salin variabel lingkungan
+### 2. Configure Environment Variables
+Copy `.env.example` to `.env.local`:
+```bash
 cp .env.example .env.local
+```
 
-# 3. Jalankan server pengembang
+### 3. Launch Development Servers
+```bash
 npm run dev
 ```
 
-Buka peramban di: **[http://localhost:3000](http://localhost:3000)**
+- **Frontend Studio**: [http://localhost:5173](http://localhost:5173)
+- **Backend API Server**: [http://localhost:5000](http://localhost:5000)
+- **API Health**: [http://localhost:5000/api/health](http://localhost:5000/api/health)
 
 ---
 
-## 📚 Dokumentasi Rinci
+## 📚 Technical Documentation
 
-Telusuri direktori [docs/README.md](./docs/README.md) untuk mempelajari:
-- [01. Gambaran Umum Proyek](./docs/01_PROJECT_OVERVIEW.md)
-- [02. Desain Arsitektur Terpadu](./docs/02_ARCHITECTURE_UNIFIED.md)
-- [03. Ingestion Data BMKG & WAF Bypass](./docs/03_BMKG_API_INGESTION.md)
-- [04. Skema Basis Data Supabase](./docs/04_SUPABASE_DATABASE_SCHEMA.md)
-- [05. Referensi Endpoint REST API](./docs/05_REST_API_ENDPOINTS.md)
-- [06. Panduan Mesin Simulasi](./docs/06_SIMULATION_ENGINE.md)
-- [07. Peta GIS Leaflet](./docs/07_LEAFLET_GIS_SEISMIC_MAP.md)
-- [08. Sirine Suara Web Audio API](./docs/08_WEB_AUDIO_EMERGENCY_SIREN.md)
-- [10. Panduan Pengembangan Lokal](./docs/10_LOCAL_DEVELOPMENT_GUIDE.md)
-- [11. Panduan Deployment Vercel & Supabase](./docs/11_DEPLOYMENT_VERCEL_SUPABASE.md)
-- [12. Troubleshooting & FAQ](./docs/12_TROUBLESHOOTING_FAQ.md)
+Explore the [docs/](./docs/README.md) directory for in-depth engineering documentation:
+- [Computer Vision Pipeline & FACS Blendshapes](./docs/COMPUTER_VISION_PIPELINE.md)
+- [Authentication, Security, and Privacy Architecture](./docs/AUTH_SECURITY_PRIVACY.md)
+- [REST API Reference](./docs/API_REFERENCE.md)
+- [Getting Started & Local Development](./docs/GETTING_STARTED.md)
+- [Production Deployment (Google Cloud Run + Cloud SQL)](./docs/PRODUCTION_DEPLOYMENT.md)
+
+---
+
+## 📄 License
+Distributed under the [MIT](LICENSE) License.

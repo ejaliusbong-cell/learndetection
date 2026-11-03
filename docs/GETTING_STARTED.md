@@ -1,95 +1,65 @@
-# 🚀 Panduan Mulai Cepat (Getting Started)
+# 🚀 Getting Started & Local Development Guide
 
-Panduan ini berisi langkah-langkah mudah untuk menyiapkan, menginstal dependensi, mengonfigurasi variabel lingkungan, dan menjalankan FaceScan Monorepo di komputer lokal Anda.
+## 1. Prerequisites
 
----
-
-## 1. Prasyarat Sistem
-
-Pastikan perangkat Anda telah terinstal perangkat lunak berikut:
-- **Node.js**: Versi `18.x` atau lebih baru (disarankan `20.x` atau `24.x`)
-- **npm**: Versi `9.x` atau lebih baru (disertakan bersama instalasi Node.js)
-- **Git**: Versi `2.x`
-- *(Opsional)* **Supabase CLI**: Jika ingin menjalankan emulasi Supabase lokal dengan Docker.
+- **Node.js**: v18.x, v20.x, or v24.x
+- **npm**: v9.x or later
+- Modern browser supporting WebAssembly and MediaDevices API (Chrome, Edge, Firefox, Safari).
 
 ---
 
-## 2. Instalasi Dependensi Monorepo
+## 2. Installation
 
-Jalankan perintah instalasi dari direktori root proyek:
+Clone the repository and install all dependencies:
 
 ```bash
-# Masuk ke direktori root FaceScan
+# Clone repository
+git clone https://github.com/ejaliusbong-cell/learndetection.git
 cd FaceScan
 
-# Instal semua dependensi untuk semua package dan app sekaligus
-npm install
+# Install root, client, and server dependencies
+npm run install:all
 ```
-
-Sistem **npm workspaces** akan secara otomatis menghubungkan `@facescan/shared` dan `@facescan/supabase-config` ke dalam `apps/web` dan `apps/api`.
 
 ---
 
-## 3. Konfigurasi Variabel Lingkungan (.env)
+## 3. Environment Configuration
 
-Buat file konfigurasi `.env` pada root atau masing-masing sub-proyek. Anda dapat menyalin contoh dari `.env.example`:
+Copy the example configuration to your local `.env.local` or `.env`:
 
-### A. Root `.env` (atau `apps/api/.env`)
-```ini
-PORT=4000
-NODE_ENV=development
-API_CORS_ORIGIN=http://localhost:5173
-
-# Konfigurasi Supabase
-SUPABASE_URL=https://proyek-anda.supabase.co
-SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```bash
+cp .env.example .env.local
 ```
 
-### B. Frontend `apps/web/.env`
-```ini
-VITE_API_BASE_URL=http://localhost:4000/api
-VITE_SUPABASE_URL=https://proyek-anda.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-VITE_APP_NAME="FaceScan AI Web App"
-```
+### Key Variables:
+- `VITE_SUPABASE_URL`: Your Supabase Project URL (`https://fvpbaxlbdiedghesetba.supabase.co`).
+- `VITE_SUPABASE_ANON_KEY`: Your Supabase Anon Key.
+- `SUPABASE_JWT_SECRET`: Your Supabase JWT Secret (`fKLL83cYh5I/bTFswwVqEgzW7ZrBTPa2nBWiDx6ekV2ukWYBxcrAHFJJpJlHk7fIbYwrxaVLztyHXZbdwGI8HQ==`).
+- `DATABASE_URL`: Connection string to your Google Cloud SQL / Supabase PostgreSQL database.
 
-> **Catatan Mode Demo / Simulasi**:
-> Jika Anda belum memiliki akun Supabase aktif, aplikasi tetap dapat dijalankan! Frontend dan Backend telah dilengkapi *fallback simulation mode* sehingga antarmuka dan pemindaian wajah dapat langsung diuji.
+*(Note: The server includes a high-speed in-memory store adapter that activates automatically if the live PostgreSQL database is not reachable, enabling seamless local UI and camera testing!)*
 
 ---
 
-## 4. Menjalankan Aplikasi di Mode Pengembangan (Development)
+## 4. Running Development Servers
 
-Tersedia beberapa skrip siap pakai di root `package.json`:
+Start both frontend and backend concurrently:
 
-### A. Menjalankan Frontend dan Backend Secara Bersamaan
 ```bash
 npm run dev
 ```
 
-### B. Menjalankan Hanya Salah Satu Bagian
-```bash
-# Menjalankan frontend saja (http://localhost:5173)
-npm run dev:web
-
-# Menjalankan backend server saja (http://localhost:4000)
-npm run dev:api
-```
-
-### URL Akses Lokal:
-- **Frontend Web UI**: [http://localhost:5173](http://localhost:5173)
-- **Backend REST API**: [http://localhost:4000/api/health](http://localhost:4000/api/health)
+This launches:
+- **Frontend React Client**: [http://localhost:5173](http://localhost:5173)
+- **Backend Express Server**: [http://localhost:5000](http://localhost:5000)
+- **Health Check**: [http://localhost:5000/api/health](http://localhost:5000/api/health)
 
 ---
 
-## 5. Perintah Tambahan (Scripts Reference)
+## 5. Instant Test Exploration
 
-| Perintah | Deskripsi |
-| :--- | :--- |
-| `npm run build` | Melakukan build kompilasi TypeScript untuk seluruh paket dan aplikasi |
-| `npm run typecheck` | Menjalankan pengecekan tipe statis TypeScript tanpa menghasilkan output |
-| `npm run clean` | Menghapus direktori `dist/` dan cache build |
-| `npm run supabase:start` | Menjalankan instance Supabase lokal via Docker |
-| `npm run supabase:stop` | Menghentikan container Supabase lokal |
-| `npm run supabase:db:reset`| Mereset database lokal dan mengaplikasikan file migrasi serta seed |
+1. Navigate to [http://localhost:5173](http://localhost:5173).
+2. Click **Sign In** -> Click **Instant Demo Session** to test immediately with a mock session, or sign in with your live Google account.
+3. Open **Analyze Studio**, allow camera permissions, and observe real-time 478-node facial landmark tracking and expression classifications!
+4. Click **Start Recording Session**, perform different expressions, and click **Stop & Save Summary** to persist to the database.
+5. Visit the **History** tab to inspect and audit your recorded sessions.
