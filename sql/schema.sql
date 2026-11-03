@@ -101,3 +101,53 @@ CREATE POLICY "Allow server to update simulation"
 ON public.simulation_state FOR ALL
 USING (true)
 WITH CHECK (true);
+
+-- --------------------------------------------------------------------
+-- 5. Data Awal Pengujian Seismik (Seed Data)
+-- --------------------------------------------------------------------
+INSERT INTO public.earthquakes (
+    id, bmkg_id, event_time, date_str, time_str,
+    latitude, longitude, coordinates_str, magnitude, depth_km,
+    region, potency, felt_mmi, shakemap_url, category
+) VALUES
+(
+    'seed-eq-01',
+    'bmkg-seed-01',
+    now() - interval '15 minutes',
+    to_char(now(), 'DD Mon YYYY'),
+    to_char(now(), 'HH24:MI:SS') || ' WIB',
+    -7.4200, 106.9100, '-7.42, 106.91', 5.6, 24.0,
+    '84 km BaratDaya KAB-SUKABUMI-JABAR',
+    'Tidak berpotensi tsunami',
+    'III-IV Sukabumi, II-III Pelabuhan Ratu, II Bandung',
+    'https://data.bmkg.go.id/DataMKG/TEWS/20261103224510.mmi.jpg',
+    'LATEST'
+),
+(
+    'seed-eq-02',
+    'bmkg-seed-02',
+    now() - interval '2 hours',
+    to_char(now(), 'DD Mon YYYY'),
+    to_char(now() - interval '2 hours', 'HH24:MI:SS') || ' WIB',
+    -0.8900, 133.4500, '-0.89, 133.45', 6.2, 15.0,
+    '78 km TimurLaut TAMBRAUW-PAPUABARAT',
+    'Tidak berpotensi tsunami',
+    'IV Manokwari, III Sorong',
+    NULL,
+    'M5+'
+),
+(
+    'seed-eq-03',
+    'bmkg-seed-03',
+    now() - interval '4 hours',
+    to_char(now(), 'DD Mon YYYY'),
+    to_char(now() - interval '4 hours', 'HH24:MI:SS') || ' WIB',
+    1.4500, 126.8800, '1.45, 126.88', 5.2, 45.0,
+    '122 km BaratLaut JAILOLO-MALUT',
+    'Tidak berpotensi tsunami',
+    'II-III Ternate',
+    NULL,
+    'FELT'
+)
+ON CONFLICT (bmkg_id) DO NOTHING;
+
