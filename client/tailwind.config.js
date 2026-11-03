@@ -4,30 +4,36 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#f0fdfa',
-          100: '#ccfbf1',
-          500: '#14b8a6',
-          600: '#0d9488',
-          700: '#0f766e',
+        pine: {
+          DEFAULT: '#114232',
+          dark: '#0a291f',
+          light: '#1b5e48',
+          subtle: '#eaf4f0',
+        },
+        mint: {
+          DEFAULT: '#22c55e',
+          soft: '#e7f7ed',
+          border: '#bbf7d0',
+          accent: '#86efac',
         },
         slate: {
-          850: '#151f32',
-          950: '#090d16',
+          850: '#1e293b',
+          950: '#0f172a',
         },
+        canvas: '#f4f5f7',
+        surface: '#ffffff',
       },
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },
-      animation: {
-        'scan': 'scanLine 2.5s ease-in-out infinite',
-        'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      borderRadius: {
+        '3xl': '24px',
+        '4xl': '32px',
       },
-      keyframes: {
-        scanLine: {
-          '0%, 100%': { transform: 'translateY(0%)' },
-          '50%': { transform: 'translateY(100%)' },
-        },
+      boxShadow: {
+        'clean': '0 2px 14px rgba(0, 0, 0, 0.04)',
+        'clean-hover': '0 8px 24px rgba(0, 0, 0, 0.07)',
+        'pine': '0 8px 20px rgba(17, 66, 50, 0.25)',
       },
     },
   },

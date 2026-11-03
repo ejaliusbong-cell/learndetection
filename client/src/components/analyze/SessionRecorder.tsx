@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Square, Save, CheckCircle2, Loader2, Clock, Layers } from 'lucide-react';
+import { Play, Square, CheckCircle2, Clock, Layers } from 'lucide-react';
 import { api } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { ExpressionCategory, AnalysisFrameResult } from '../../types';
@@ -50,7 +50,6 @@ export const SessionRecorder: React.FC<SessionRecorderProps> = ({
     setSaveSuccess(false);
 
     try {
-      // Calculate aggregate stats across recorded frames
       const counts: Record<ExpressionCategory, number> = {
         Happy: 0,
         Neutral: 0,
@@ -89,7 +88,6 @@ export const SessionRecorder: React.FC<SessionRecorderProps> = ({
       const avgConfidence = total > 0 ? Math.round((confSum / total) * 10) / 10 : 85.0;
 
       if (user) {
-        // Authenticated user: save to backend Cloud SQL
         await api.saveAnalysisSession({
           sessionStartedAt: startedAt,
           sessionEndedAt: endedAt,
@@ -101,7 +99,6 @@ export const SessionRecorder: React.FC<SessionRecorderProps> = ({
         });
         setSavedLocally(false);
       } else {
-        // Guest user: save to localStorage guest history
         const guestSession = {
           id: `guest-${Date.now()}`,
           created_at: new Date().toISOString(),
@@ -137,26 +134,26 @@ export const SessionRecorder: React.FC<SessionRecorderProps> = ({
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+    <div className="bg-white border border-slate-200/80 rounded-[28px] p-6 shadow-clean space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <Layers className="w-5 h-5 text-teal-400" />
+          <h3 className="text-base font-bold text-[#111827] flex items-center gap-2">
+            <Layers className="w-5 h-5 text-[#114232]" />
             Session Analysis Controller
           </h3>
-          <p className="text-xs text-slate-400">
-            Record a temporal window to store aggregated distribution metrics to your database
+          <p className="text-xs text-slate-500 font-medium">
+            Record a temporal observation window to store aggregated distribution metrics to your database
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Timer Display */}
-          <div className="flex items-center gap-2 bg-slate-950 px-4 py-2 rounded-xl border border-slate-800 font-mono text-sm">
-            <Clock className="w-4 h-4 text-teal-400" />
-            <span className={isRecording ? 'text-red-400 font-bold animate-pulse' : 'text-slate-300'}>
+          {/* Timer Display - Donezo Style */}
+          <div className="flex items-center gap-2 bg-[#f4f5f7] px-4 py-2 rounded-full border border-slate-200 font-mono text-sm">
+            <Clock className="w-4 h-4 text-[#114232]" />
+            <span className={isRecording ? 'text-rose-600 font-bold animate-pulse' : 'text-slate-700 font-semibold'}>
               {formatTime(elapsedSeconds)}
             </span>
-            <span className="text-slate-500 text-xs">({recordedFrames.length} frames)</span>
+            <span className="text-slate-400 text-xs">({recordedFrames.length} frames)</span>
           </div>
 
           {/* Record / Stop Button */}
@@ -166,18 +163,18 @@ export const SessionRecorder: React.FC<SessionRecorderProps> = ({
                 setSaveSuccess(false);
                 onToggleRecording();
               }}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs shadow-md shadow-teal-600/20 transition"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#114232] hover:bg-[#0d3528] text-white font-bold text-xs shadow-pine transition"
             >
-              <Play className="w-4 h-4 fill-white" />
+              <Play className="w-3.5 h-3.5 fill-white" />
               Start Recording Session
             </button>
           ) : (
             <button
               onClick={handleStopAndSave}
               disabled={isSaving}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow-md shadow-red-600/20 transition"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md transition"
             >
-              <Square className="w-4 h-4 fill-white" />
+              <Square className="w-3.5 h-3.5 fill-white" />
               Stop & Save Summary
             </button>
           )}
@@ -186,8 +183,8 @@ export const SessionRecorder: React.FC<SessionRecorderProps> = ({
 
       {/* Save status notification */}
       {saveSuccess && (
-        <div className="p-3.5 bg-emerald-950/60 border border-emerald-500/30 rounded-xl text-emerald-300 text-xs flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+        <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs flex items-center gap-2 font-medium">
+          <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-[#114232]" />
           <span>
             {savedLocally
               ? 'Sesi berhasil disimpan di penyimpanan lokal browser Anda! (Masuk akun jika ingin sinkronisasi cloud permanen).'
@@ -204,7 +201,7 @@ export const SessionRecorder: React.FC<SessionRecorderProps> = ({
             value={sessionNotes}
             onChange={e => setSessionNotes(e.target.value)}
             placeholder="Add optional session notes (e.g. Usability test participant #4, Interview prompt 2)..."
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 outline-none focus:border-teal-500"
+            className="w-full bg-[#f4f5f7] border border-slate-200 rounded-full px-4 py-2.5 text-xs text-slate-800 outline-none font-medium focus:border-[#114232]"
           />
         </div>
       )}

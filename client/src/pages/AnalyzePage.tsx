@@ -6,7 +6,7 @@ import { SessionRecorder } from '../components/analyze/SessionRecorder';
 import { PrivacyDisclaimer } from '../components/analyze/PrivacyDisclaimer';
 import { useAuth } from '../context/AuthContext';
 import { AnalysisFrameResult } from '../types';
-import { Sparkles, Activity, ShieldCheck, LogIn } from 'lucide-react';
+import { Sparkles, Activity, ShieldCheck, LogIn, Camera } from 'lucide-react';
 
 export const AnalyzePage: React.FC = () => {
   const { user } = useAuth();
@@ -25,25 +25,25 @@ export const AnalyzePage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      {/* Guest Mode Notice Banner */}
+      {/* Guest Mode Notice Banner - Donezo Clean Style */}
       {!user && (
-        <div className="bg-gradient-to-r from-teal-950/60 via-slate-900 to-slate-900 border border-teal-500/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+        <div className="bg-white rounded-[24px] border border-slate-200/80 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-clean">
           <div className="flex items-start sm:items-center gap-3">
-            <div className="p-2 rounded-xl bg-teal-500/20 text-teal-400 flex-shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-[#eaf4f0] text-[#114232] flex items-center justify-center flex-shrink-0">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs sm:text-sm font-semibold text-white">
-                Mode Akses Langsung (Tanpa Login) Aktif
+              <p className="text-xs sm:text-sm font-bold text-[#111827]">
+                Mode Akses Langsung Bebas Aktif (Tanpa Login)
               </p>
-              <p className="text-[11px] sm:text-xs text-slate-400">
+              <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
                 Kamera dan pemrosesan AI 478-landmark MediaPipe berjalan 100% lokal di browser Anda. Ingin menyimpan riwayat sesi ke Cloud SQL?
               </p>
             </div>
           </div>
           <Link
             to="/auth"
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs whitespace-nowrap self-start sm:self-auto transition shadow-sm"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#114232] hover:bg-[#0d3528] text-white font-bold text-xs whitespace-nowrap self-start sm:self-auto transition shadow-sm"
           >
             <LogIn className="w-3.5 h-3.5" />
             Sign In Akun
@@ -51,23 +51,23 @@ export const AnalyzePage: React.FC = () => {
         </div>
       )}
 
-      {/* Page Title */}
+      {/* Page Title & Status Pill */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-semibold mb-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#eaf4f0] text-[#114232] text-xs font-bold border border-[#114232]/10 mb-1">
             <Sparkles className="w-3.5 h-3.5" />
             MediaPipe Face Landmarker V2
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111827] tracking-tight">
             Real-Time Facial Expression Studio
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400">
-            High-precision 478-node facial landmark geometry and blendshape classification.
+          <p className="text-xs sm:text-sm text-slate-500">
+            High-precision 478-node facial landmark geometry and scientific FACS blendshape classification.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl self-start sm:self-auto">
-          <Activity className="w-4 h-4 text-teal-400" />
+        <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-white border border-slate-200/80 px-3.5 py-2 rounded-full shadow-clean self-start sm:self-auto">
+          <Activity className="w-4 h-4 text-[#114232]" />
           <span>Inference: Client WebAssembly</span>
         </div>
       </div>
@@ -87,7 +87,7 @@ export const AnalyzePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Session Recorder Controller */}
+      {/* Session Recorder Controller - Styled like Time Tracker */}
       <SessionRecorder
         isRecording={isRecording}
         onToggleRecording={() => setIsRecording(prev => !prev)}
