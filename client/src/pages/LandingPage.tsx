@@ -132,7 +132,7 @@ export const LandingPage: React.FC = () => {
               className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white font-bold text-sm shadow-xl shadow-teal-500/25 transition-all transform hover:-translate-y-0.5"
             >
               <Camera className="w-4 h-4" />
-              Start Analyzing Now
+              Buka Kamera & Mulai Analisis
             </Link>
 
             <a
@@ -143,6 +143,10 @@ export const LandingPage: React.FC = () => {
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </a>
           </div>
+
+          <p className="text-xs text-teal-400/90 font-medium">
+            ✨ Bebas Akses: Coba AI deteksi wajah langsung di browser tanpa harus registrasi atau login!
+          </p>
 
           {/* Interactive Illustration Preview Card */}
           <div className="pt-12 max-w-4xl mx-auto">

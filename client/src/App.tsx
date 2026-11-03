@@ -21,6 +21,8 @@ export function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<AuthPage />} />
+              {/* Public Real-Time Camera Studio (No login required) */}
+              <Route path="/analyze" element={<AnalyzePage />} />
               
               {/* Protected Routes */}
               <Route
@@ -28,14 +30,6 @@ export function App() {
                 element={
                   <ProtectedRoute>
                     <DashboardPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/analyze"
-                element={
-                  <ProtectedRoute>
-                    <AnalyzePage />
                   </ProtectedRoute>
                 }
               />

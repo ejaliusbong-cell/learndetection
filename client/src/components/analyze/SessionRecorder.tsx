@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Square, Save, CheckCircle2, Loader2, Clock, Layers } from 'lucide-react';
 import { api } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import { ExpressionCategory, AnalysisFrameResult } from '../../types';
 
 interface SessionRecorderProps {
@@ -16,10 +17,12 @@ export const SessionRecorder: React.FC<SessionRecorderProps> = ({
   recordedFrames,
   onResetRecording,
 }) => {
+  const { user } = useAuth();
   const [sessionStartTime, setSessionStartTime] = useState<number | null>(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [savedLocally, setSavedLocally] = useState(false);
   const [sessionNotes, setSessionNotes] = useState('');
 
   // Track elapsed timer
@@ -85,15 +88,35 @@ export const SessionRecorder: React.FC<SessionRecorderProps> = ({
       const endedAt = new Date().toISOString();
       const avgConfidence = total > 0 ? Math.round((confSum / total) * 10) / 10 : 85.0;
 
-      await api.saveAnalysisSession({
-        sessionStartedAt: startedAt,
-        sessionEndedAt: endedAt,
-        dominantExpression: dominant,
-        averageConfidence: avgConfidence,
-        totalFramesAnalyzed: total,
-        expressionDistribution: distributionPercentages,
-        notes: sessionNotes || undefined,
-      });
+      if (user) {
+        // Authenticated user: save to backend Cloud SQL
+        await api.saveAnalysisSession({
+          sessionStartedAt: startedAt,
+          sessionEndedAt: endedAt,
+          dominantExpression: dominant,
+          averageConfidence: avgConfidence,
+          totalFramesAnalyzed: total,
+          expressionDistribution: distributionPercentages,
+          notes: sessionNotes || undefined,
+        });
+        setSavedLocally(false);
+      } else {
+        // Guest user: save to localStorage guest history
+        const guestSession = {
+          id: `guest-${Date.now()}`,
+          created_at: new Date().toISOString(),
+          session_started_at: startedAt,
+          session_ended_at: endedAt,
+          dominant_expression: dominant,
+          average_confidence: avgConfidence,
+          total_frames_analyzed: total,
+          expression_distribution: distributionPercentages,
+          notes: sessionNotes ? `${sessionNotes} (Guest Local)` : 'Guest Session (Lokal)',
+        };
+        const prev = JSON.parse(localStorage.getItem('facescan_guest_sessions') || '[]');
+        localStorage.setItem('facescan_guest_sessions', JSON.stringify([guestSession, ...prev]));
+        setSavedLocally(true);
+      }
 
       setSaveSuccess(true);
       onResetRecording();
@@ -164,8 +187,12 @@ export const SessionRecorder: React.FC<SessionRecorderProps> = ({
       {/* Save status notification */}
       {saveSuccess && (
         <div className="p-3.5 bg-emerald-950/60 border border-emerald-500/30 rounded-xl text-emerald-300 text-xs flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-          <span>Session summary successfully synchronized to your Google Cloud SQL database! View it in the History tab.</span>
+          <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+          <span>
+            {savedLocally
+              ? 'Sesi berhasil disimpan di penyimpanan lokal browser Anda! (Masuk akun jika ingin sinkronisasi cloud permanen).'
+              : 'Session summary successfully synchronized to your Google Cloud SQL database! View it in the History tab.'}
+          </span>
         </div>
       )}
 

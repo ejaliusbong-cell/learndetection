@@ -74,6 +74,17 @@ export const Navbar: React.FC = () => {
             </>
           ) : (
             <>
+              <Link
+                to="/analyze"
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition ${
+                  isActive('/analyze')
+                    ? 'bg-teal-500/10 text-teal-300 border border-teal-500/30'
+                    : 'text-teal-400 hover:text-teal-300 hover:bg-slate-900'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5 text-teal-400 animate-pulse" />
+                Live Camera
+              </Link>
               <a href="/#features" className="px-3 py-2 text-xs font-medium text-slate-300 hover:text-white transition">
                 Features
               </a>
@@ -121,16 +132,17 @@ export const Navbar: React.FC = () => {
           ) : (
             <div className="flex items-center gap-2">
               <Link
-                to="/auth"
-                className="px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white transition"
+                to="/analyze"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 shadow-md shadow-teal-500/20 flex items-center gap-1.5 transition"
               >
-                Sign In
+                <Sparkles className="w-3.5 h-3.5" />
+                Buka Kamera
               </Link>
               <Link
                 to="/auth"
-                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 shadow-md shadow-teal-500/20 transition"
+                className="px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white transition"
               >
-                Get Started Free
+                Sign In
               </Link>
             </div>
           )}
@@ -190,6 +202,14 @@ export const Navbar: React.FC = () => {
             </>
           ) : (
             <>
+              <Link
+                to="/analyze"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 text-sm font-semibold text-teal-400 bg-teal-500/10 rounded-xl"
+              >
+                <Sparkles className="w-4 h-4 text-teal-400" />
+                Live Camera Studio (Bebas Akses)
+              </Link>
               <a
                 href="/#features"
                 onClick={() => setMobileMenuOpen(false)}
